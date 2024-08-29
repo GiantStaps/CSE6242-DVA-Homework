@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!-- cse6242 -->
+
+<!-- run: http-server & -->
+
+<head>
+  <style>    
+    /* Define css rules here */
+    div.bar {
+      margin-right: 2px;
+      display: inline-block;
+      width: 20px;
+      height: 75px;   /* We'll override height later */
+      background-color: teal;
+    }
+  </style>
+<title></title>
+</head>
+
+<body>
+
+  <script src="lib/d3/d3.min.js"></script>
+  <script src="lib/d3-dsv/d3-dsv.min.js"></script>
+  <script src="lib/d3-fetch/d3-fetch.min.js"></script>
+
+
+  <script>
+    // define the dimensions and margins for the graph
+    var margin;
+    var width = 500;
+    var height = 50;
+
+
+    // create scales x & y for X and Y axis and set their ranges
+    var x;
+    var y;
+
+    // append svg element to the body of the page
+    var svg = d3.select("body").append("svg")
+	   	// set the id, dimensions and position of the svg element 	
+	    .append("g")
+	    .attr("id", "container")
+      .attr("width", width)
+      .attr("height", height);
+
+
+    // Get the data and filter for top 5 most trafficked species
+	  var pathToCsv = "q3.csv";		// path to csv
+	
+    d3.dsv(",", pathToCsv, function (d) {
+      return {
+        // format data attributes if required
+        species: d.species,
+        count: +d.count
+      }
+    }).then(function (data) {
+      console.log(data); // you should see the data in your browser's developer tools console 
+      var topData = data.slice(0, 5);
+      d3.select("body").selectAll("p")
+        .data(topData)
+        .enter()
+        .append("p")
+        .text(function(d){
+          return d.species + ": " + d.count;
+        })
+        .style("color", "blue");
+      /* Create bar plot using data from csv */
+      d3.select("body").selectAll("div")
+        .data(topData)
+        .enter()
+        .append("div")
+        .attr("class", "bar")
+        .style("height", function(d) {
+          var barHeight = d.count / 20;
+          return barHeight + "px"
+        });
+      // set the domains of X and Y scales based on data
+      x.domain();
+      y.domain();
+
+      // Add bars to svg - create new elements based on your data
+      svg.selectAll("rect")
+        .data(topData)
+        .enter()
+        .append("rect")
+        .attr("x", function(d) {
+          return d * 10
+        })
+
+
+      // Add the X Axis
+      svg.append()
+
+      // Add the text label for X Axis
+      svg.append()
+
+      // Add the Y Axis
+      svg.append()
+
+      // Add the text label for Y axis
+      svg.append()
+
+      // Add GT username
+      svg.append()
+
+      // Add Title
+      svg.append()
+
+
+    }).catch(function (error) {
+      console.log(error);
+    });
+
+  </script>
+</body>
