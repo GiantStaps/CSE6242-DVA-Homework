@@ -25,15 +25,19 @@
 
 
   <script>
+    var dataset;
+
     // define the dimensions and margins for the graph
-    var margin;
-    var width = 500;
-    var height = 50;
+    var margin = 20;
+    var width = 900;
+    var height = 370;
 
 
     // create scales x & y for X and Y axis and set their ranges
-    var x;
-    var y;
+    var x = d3.scaleLinear()
+              .range([margin, width - margin]);
+    var y = d3.scaleBand()
+              .range([margin, height - margin]);
 
     // append svg element to the body of the page
     var svg = d3.select("body").append("svg")
@@ -46,7 +50,13 @@
 
     // Get the data and filter for top 5 most trafficked species
 	  var pathToCsv = "q3.csv";		// path to csv
-	
+    var getCounts = function(d){
+        return d.count;
+      }
+    var getSpecies = function(d){
+        return d.species;
+    }
+
     d3.dsv(",", pathToCsv, function (d) {
       return {
         // format data attributes if required
@@ -54,48 +64,37 @@
         count: +d.count
       }
     }).then(function (data) {
-      console.log(data); // you should see the data in your browser's developer tools console 
-      var topData = data.slice(0, 5);
-      d3.select("body").selectAll("p")
-        .data(topData)
-        .enter()
-        .append("p")
-        .text(function(d){
-          return d.species + ": " + d.count;
-        })
-        .style("color", "blue");
-      /* Create bar plot using data from csv */
-      d3.select("body").selectAll("div")
-        .data(topData)
-        .enter()
-        .append("div")
-        .attr("class", "bar")
-        .style("height", function(d) {
-          var barHeight = d.count / 20;
-          return barHeight + "px"
-        });
+      console.log(data);
+      dataset = data.slice(0, 5);
+
       // set the domains of X and Y scales based on data
-      x.domain();
-      y.domain();
+      x.domain([0, d3.max(dataset, getCounts)]);
+      y.domain(dataset.map(getSpecies));
 
       // Add bars to svg - create new elements based on your data
       svg.selectAll("rect")
-        .data(topData)
+        .data(dataset)
         .enter()
         .append("rect")
-        .attr("x", function(d) {
-          return d * 10
-        })
+        .attr("width", 20)
+        .attr("height", 100);
 
 
       // Add the X Axis
-      svg.append()
+      svg.append("g")
+          .attr("class", "axis")
+          .attr("id", "x_axis")
+          .attr("transform", "translate(0," + (height-margin)+ ")")
+          .call(d3.axisBottom(x));
 
       // Add the text label for X Axis
-      svg.append()
 
       // Add the Y Axis
-      svg.append()
+      svg.append("g")
+          .attr("class", "axis")
+          .attr("id", "y_axis")
+          .attr("transform", "translate(" + margin + ",0)")
+          .call(d3.axisLeft(y));
 
       // Add the text label for Y axis
       svg.append()
