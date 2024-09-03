@@ -4,17 +4,15 @@
 <!-- run: http-server & -->
 
 <head>
-  <style>    
-    /* Define css rules here */
-    div.bar {
-      margin-right: 2px;
-      display: inline-block;
-      width: 20px;
-      height: 75px;   /* We'll override height later */
-      background-color: teal;
+  <style>
+    .axis_label {
+      font-size: 16px;
+      text-anchor: middle;
     }
   </style>
-<title></title>
+<title>
+  Wildlife Trafficking Incidents per Species (2015 to 2023)
+</title>
 </head>
 
 <body>
@@ -26,9 +24,17 @@
 
   <script>
     var dataset;
-
+    const colorblind_palette = [
+      "#E69F00", // Orange
+      "#56B4E9", // Sky Blue
+      "#009E73", // Bluish Green
+      "#F0E442", // Yellow
+      "#0072B2", // Blue
+      "#D55E00", // Vermilion
+      "#CC79A7"  // Reddish Purple
+    ];
     // define the dimensions and margins for the graph
-    var margin = 20;
+    var margin = 70;
     var width = 900;
     var height = 370;
 
@@ -37,15 +43,16 @@
     var x = d3.scaleLinear()
               .range([margin, width - margin]);
     var y = d3.scaleBand()
-              .range([margin, height - margin]);
+              .range([margin, height - margin])
+              .padding(0.2);
 
     // append svg element to the body of the page
     var svg = d3.select("body").append("svg")
-	   	// set the id, dimensions and position of the svg element 	
-	    .append("g")
-	    .attr("id", "container")
+      .attr("id", "svg1")
       .attr("width", width)
-      .attr("height", height);
+      .attr("height", height)
+	    .append("g")
+      .attr("id", "container");
 
 
     // Get the data and filter for top 5 most trafficked species
@@ -72,12 +79,18 @@
       y.domain(dataset.map(getSpecies));
 
       // Add bars to svg - create new elements based on your data
-      svg.selectAll("rect")
-        .data(dataset)
-        .enter()
-        .append("rect")
-        .attr("width", 20)
-        .attr("height", 100);
+      svg.append("g")
+          .attr("class", "bars")
+          .attr("id", "bars")
+          .selectAll("rect")
+          .data(dataset)
+          .enter()
+          .append("rect")
+          .attr("x", margin)
+          .attr("y", function(d) { return y(d.species); })
+          .attr("width", function(d) { return x(d.count) - margin; })
+          .attr("height", y.bandwidth())
+          .attr("fill", function(d, i) { return colorblind_palette[i % colorblind_palette.length]; });  // Assign a color from the palette cyclically
 
 
       // Add the X Axis
@@ -88,22 +101,50 @@
           .call(d3.axisBottom(x));
 
       // Add the text label for X Axis
+      svg.append("text")
+        .attr("class", "axis_label")
+        .attr("id", "x_axis_label")
+        .attr("x", width / 2)  // Center the label horizontally
+        .attr("y", height - margin * 0.4)  // Position it below the x-axis
+        .text("Count");  // The label text
 
       // Add the Y Axis
       svg.append("g")
           .attr("class", "axis")
           .attr("id", "y_axis")
           .attr("transform", "translate(" + margin + ",0)")
-          .call(d3.axisLeft(y));
+          .call(d3.axisLeft(y))
+          .selectAll("path, line")  // select the line and ticks
+          .style("display", "none");  // Hide them
 
       // Add the text label for Y axis
-      svg.append()
+      svg.append("text")
+        .attr("class", "axis_label")
+        .attr("id", "y_axis_label")
+        .attr("x", margin * 0.5)  // Center the label horizontally
+        .attr("y", margin)  // Position it below the x-axis
+        .text("Species");
 
       // Add GT username
-      svg.append()
+      svg.append("text")
+        .attr("class", "credit")
+        .attr("id", "credit")
+        .attr("x", width - margin)  // Center the label horizontally
+        .attr("y", height)  // Position it below the x-axis
+        .text("rma86")
+        .style("font-size", "12px")
+        .style("text-anchor", "middle");
 
       // Add Title
-      svg.append()
+      svg.append("text")
+        .attr("class", "title")
+        .attr("id", "title")
+        .style("text-anchor", "middle")
+        .style("font-size", "20px")
+        .style("font-weight", "bold")
+        .attr("x", width/2)  // Center the label horizontally
+        .attr("y", margin * 0.5)  // Position it below the x-axis
+        .text("Wildlife Trafficking Incidents per Species (2015 to 2023)");
 
 
     }).catch(function (error) {
