@@ -45,6 +45,16 @@ d3.dsv(",", "board_games.csv", function (d) {
         .attr("width", width)
         .attr("height", height);
 
+    // add gdid
+    var name = svg.append("text")
+                .attr("id", "credit")
+                .attr("x", width / 1.5)
+                .attr("y", 20)
+                .attr("text-anchor", "end")
+                .style("font-size", "10px")
+                // .style("fill", "#000000") 
+                .text("rma86");
+
     // add the links
     var path = svg.append("g")
         .selectAll("path")
@@ -59,10 +69,10 @@ d3.dsv(",", "board_games.csv", function (d) {
         .enter().append("g")
         .attr("class", "node")
         .call(d3.drag()
-            .on("start", dragstarted)
-            .on("drag", dragged)
-            .on("end", pinNode))
-            .on("dblclick", unpinNode);
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", pinNode))
+        .on("dblclick", unpinNode);
 
     // add the nodes
     var minRadius = 5;
