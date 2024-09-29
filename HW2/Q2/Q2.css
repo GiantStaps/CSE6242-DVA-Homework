@@ -20,3 +20,13 @@ text {
 text.name {
     font: bold 10px sans-serif;
 }
+
+.link.similar {
+    stroke: gray;
+    stroke-width: 3px;
+}
+
+.link.dissimilar {
+    stroke: green;
+    stroke-dasharray: 5,5;
+}

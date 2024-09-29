@@ -2,10 +2,10 @@ d3.dsv(",", "board_games.csv", function (d) {
     return {
         source: d.source,
         target: d.target,
-        value: +d.value
+        value: +d.value,
+        type: +d.value == 0 ? "similar" : "dissimilar"
     }
 }).then(function (data) {
-
     var links = data;
 
     var nodes = {};
@@ -87,27 +87,3 @@ d3.dsv(",", "board_games.csv", function (d) {
 
     function dragstarted(d) {
         if (!d3.event.active) force.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-    };
-
-    function dragged(d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
-    };
-
-    function dragended(d) {
-        if (!d3.event.active) force.alphaTarget(0);
-        if (d.fixed == true) {
-            d.fx = d.x;
-            d.fy = d.y;
-        }
-        else {
-            d.fx = null;
-            d.fy = null;
-        }
-    };
-
-}).catch(function (error) {
-    console.log(error);
-});
