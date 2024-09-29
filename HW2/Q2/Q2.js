@@ -7,14 +7,14 @@ d3.dsv(",", "board_games.csv", function (d) {
     }
 }).then(function (data) {
     var links = data;
-    
+
     var nodes = {};
 
     var weight_max = 0;
 
     // compute the distinct nodes from the links.
     links.forEach(function (link) {
-        link.source = nodes[link.source] || (nodes[link.source] = { name: link.source, weight: 0});
+        link.source = nodes[link.source] || (nodes[link.source] = { name: link.source, weight: 0 });
         link.target = nodes[link.target] || (nodes[link.target] = { name: link.target, weight: 0 });
         // Calculate the degree of each node
         link.source.weight += 1;
@@ -61,7 +61,8 @@ d3.dsv(",", "board_games.csv", function (d) {
         .call(d3.drag()
             .on("start", dragstarted)
             .on("drag", dragged)
-            .on("end", dragended));
+            .on("end", pinNode))
+            .on("dblclick", unpinNode);
 
     // add the nodes
     var minRadius = 5;
@@ -72,8 +73,7 @@ d3.dsv(",", "board_games.csv", function (d) {
         .attr("r", function (d) {
             return minRadius + (d.weight * 2);
         })
-        .attr("fill", function(d) {
-            console.log(color_scale(d.weight));
+        .attr("fill", function (d) {
             return color_scale(d.weight);
         });
 
@@ -115,16 +115,38 @@ d3.dsv(",", "board_games.csv", function (d) {
         d.fy = d3.event.y;
     };
 
-    function dragended(d) {
-        if (!d3.event.active) force.alphaTarget(0);
-        if (d.fixed == true) {
-            d.fx = d.x;
-            d.fy = d.y;
-        }
-        else {
-            d.fx = null;
-            d.fy = null;
-        }
+    // function dragended(d) {
+    //     if (!d3.event.active) force.alphaTarget(0);
+    //     if (d.fixed == true) {
+    //         d.fx = d.x;
+    //         d.fy = d.y;
+    //     }
+    //     else {
+    //         d.fx = null;
+    //         d.fy = null;
+    //     }
+    // };
+
+    function pinNode(d) {
+        d.fixed = true;
+        d.fx = d.x;
+        d.fy = d.y;
+
+        d3.select(this)
+            .select("circle")
+            .attr("fill", "#FFFF00");
+    }
+
+    function unpinNode(d) {
+        d.fixed = false;
+        d.fx = null;
+        d.fy = null;
+
+        d3.select(this)
+            .select("circle")
+            .attr("fill", function (d) {
+                return color_scale(d.weight);
+            });
     };
 
 }).catch(function (error) {
