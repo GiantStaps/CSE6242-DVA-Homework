@@ -7,14 +7,30 @@ d3.dsv(",", "board_games.csv", function (d) {
     }
 }).then(function (data) {
     var links = data;
-
+    
     var nodes = {};
+
+    var weight_max = 0;
 
     // compute the distinct nodes from the links.
     links.forEach(function (link) {
-        link.source = nodes[link.source] || (nodes[link.source] = { name: link.source });
-        link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
+        link.source = nodes[link.source] || (nodes[link.source] = { name: link.source, weight: 0});
+        link.target = nodes[link.target] || (nodes[link.target] = { name: link.target, weight: 0 });
+        // Calculate the degree of each node
+        link.source.weight += 1;
+        link.target.weight += 1;
+        // Calculate maximum degree so we can map weight range to color scheme.
+        weight_max = Math.max(weight_max, link.source.weight, link.target.weight);
     });
+
+    var weight_list = [];
+    for (const [name, val] of Object.entries(nodes)) {
+        weight_list.push(val.weight);
+    };
+    console.log(weight_list);
+
+    // colors for 3 classes of node degrees
+    var colorscheme = ["#e5f5f9", "#99d8c9", "#2ca25f"];
 
     var width = 1200,
         height = 700;
@@ -52,11 +68,14 @@ d3.dsv(",", "board_games.csv", function (d) {
             .on("end", dragended));
 
     // add the nodes
+    var minRadius = 5;
     node.append("circle")
         .attr("id", function (d) {
             return (d.name.replace(/\s+/g, '').toLowerCase());
         })
-        .attr("r", 5);
+        .attr("r", function (d) {
+            return minRadius + (d.weight * 2);
+        });
 
     // add the node names
     node.append("text")
@@ -87,3 +106,27 @@ d3.dsv(",", "board_games.csv", function (d) {
 
     function dragstarted(d) {
         if (!d3.event.active) force.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    };
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    };
+
+    function dragended(d) {
+        if (!d3.event.active) force.alphaTarget(0);
+        if (d.fixed == true) {
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+        else {
+            d.fx = null;
+            d.fy = null;
+        }
+    };
+
+}).catch(function (error) {
+    console.log(error);
+});
