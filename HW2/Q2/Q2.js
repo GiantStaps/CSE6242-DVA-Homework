@@ -23,14 +23,10 @@ d3.dsv(",", "board_games.csv", function (d) {
         weight_max = Math.max(weight_max, link.source.weight, link.target.weight);
     });
 
-    var weight_list = [];
-    for (const [name, val] of Object.entries(nodes)) {
-        weight_list.push(val.weight);
-    };
-    console.log(weight_list);
-
-    // colors for 3 classes of node degrees
-    var colorscheme = ["#e5f5f9", "#99d8c9", "#2ca25f"];
+    // map the node weight distribution to a continuous range of greenness
+    var color_scale = d3.scaleLinear()
+        .domain([0, weight_max])
+        .range(["#e5f5f9", "#2ca25f"]);
 
     var width = 1200,
         height = 700;
@@ -75,6 +71,10 @@ d3.dsv(",", "board_games.csv", function (d) {
         })
         .attr("r", function (d) {
             return minRadius + (d.weight * 2);
+        })
+        .attr("fill", function(d) {
+            console.log(color_scale(d.weight));
+            return color_scale(d.weight);
         });
 
     // add the node names
