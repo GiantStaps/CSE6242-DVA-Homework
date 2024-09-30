@@ -301,6 +301,19 @@ d3.csv("boardgame_ratings.csv").then(function (data) {
     document.body.append(chart("b"));
     document.body.append(chart("c-1"));
     document.body.append(chart("c-2"));
-    document.body
-        .append("div");
+
+    const signatureDiv = document.createElement('div');
+    signatureDiv.id = 'signature';
+    signatureDiv.textContent = 'rma86';
+
+    // Add styles directly for positioning if needed
+    signatureDiv.style.position = 'fixed';
+    signatureDiv.style.bottom = '0';
+    signatureDiv.style.right = '0'; // This ensures it's at the bottom-right corner
+    signatureDiv.style.backgroundColor = 'white';
+    signatureDiv.style.padding = '10px';
+    signatureDiv.style.zIndex = '9999';
+
+    // Append the div to the end of the body
+    document.body.appendChild(signatureDiv);
 });
