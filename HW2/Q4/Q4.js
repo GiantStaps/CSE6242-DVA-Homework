@@ -189,6 +189,10 @@ function createLineChart(data, maxRating, yearInterested, margin, width, height)
     };
 }
 
+function createBarChart(data) {
+    
+}
+
 async function main() {
     // Load data and maxRating first
     const pathToCsv = "./average-rating.csv";
