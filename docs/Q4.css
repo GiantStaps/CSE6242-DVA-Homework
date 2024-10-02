@@ -1,11 +1,13 @@
 .title {
     text-anchor: middle;
     font: bold 16px sans-serif;
+    position: relative;
 }
 
 .label {
     text-anchor: middle;
     font: 14px sans-serif;
+    fill: black;
 }
 
 .legend {
