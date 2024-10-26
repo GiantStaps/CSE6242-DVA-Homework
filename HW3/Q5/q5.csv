@@ -1,22 +1,22 @@
 Parameter,Value
-GTID,gburdell3
-1_Mean Absolute Error,
-1_Root Mean Squared Error,
-1_Relative Absolute Error,
-1_Relative Squared Error,
-1_Coefficient of Determination,
-2_Mean Absolute Error,
-2_Root Mean Squared Error,
-2_Relative Absolute Error,
-2_Relative Squared Error,
-2_Coefficient of Determination,
-3_Root Mean Squared Error (RMSE) for 1st fold,
-3_Root Mean Squared Error (RMSE) for 2nd fold,
-3_Root Mean Squared Error (RMSE) for 3rd fold,
-3_Root Mean Squared Error (RMSE) for 4th fold,
-3_Root Mean Squared Error (RMSE) for 5th fold,
-3_Coefficient of Determination for 1st fold,
-3_Coefficient of Determination for 2nd fold,
-3_Coefficient of Determination for 3rd fold,
-3_Coefficient of Determination for 4th fold,
-3_Coefficient of Determination for 5th fold,
+GTID,rma86
+1_Mean Absolute Error,3429.439558822041
+1_Root Mean Squared Error,4407.547953701048
+1_Relative Absolute Error,1.0472830115780996
+1_Relative Squared Error,0.9745175217562706
+1_Coefficient of Determination,-0.047283011578099554
+2_Mean Absolute Error,3594.1602939630116
+2_Root Mean Squared Error,4653.1625093736975
+2_Relative Absolute Error,1.2055759621730402
+2_Relative Squared Error,0.9905344101400555
+2_Coefficient of Determination,-0.2055759621730402
+3_Root Mean Squared Error (RMSE) for 1st fold,6124.223
+3_Root Mean Squared Error (RMSE) for 2nd fold,4780.924
+3_Root Mean Squared Error (RMSE) for 3rd fold,5665.7
+3_Root Mean Squared Error (RMSE) for 4th fold,4725.138
+3_Root Mean Squared Error (RMSE) for 5th fold,4582.791
+3_Coefficient of Determination for 1st fold,0.503
+3_Coefficient of Determination for 2nd fold,0.831
+3_Coefficient of Determination for 3rd fold,-0.51
+3_Coefficient of Determination for 4th fold,0.601
+3_Coefficient of Determination for 5th fold,-0.162
